@@ -4,28 +4,28 @@
 import ply.lex as lex
 
 # reserved for cool
-reserved = ( 'class',
-        'else',
-        'false',
-        'fi',
-        'if',
-        'in',
-        'inherits',
-        'isvoid',
-        'let',
-        'loop',
-        'pool',
-        'then',
-        'while',
-        'case',
-        'esac',
-        'new',
-        'of',
-        'not',
-        'true', 
-        )
+reserved = { 'class':'CLASS',
+        'else':'ELSE',
+        'false':'FALSE',
+        'fi':'FI',
+        'if':'IF',
+        'in':'IN',
+        'inherits':'INHERITS',
+        'isvoid':'ISVOID',
+        'let':'LET',
+        'loop':'LOOP',
+        'pool':'POOL',
+        'then':'THEN',
+        'while':'WHILE',
+        'case':'CASE',
+        'esac':'ESAC',
+        'new':'NEW',
+        'of':'OF',
+        'not':'NOT',
+        'true':'TRUE', 
+        }
 
-tokens = reserved + ( 'INTEGER',
+tokens = list(reserved.values()) + [ 'INTEGER',
                     'ID',
                     'PLUS',
                     'MINUS',
@@ -46,7 +46,9 @@ tokens = reserved + ( 'INTEGER',
                     'STRING',
                     'TILDA',
                     'ATRATE',
-                    )
+                    'LESSEQ',
+                    'GREATEQ',
+                    ]
 
 # Regular expression rules for simple tokens
 t_PLUS = r'\+'
@@ -67,6 +69,8 @@ t_COMMA = r','
 t_DOT = '\.'
 t_TILDA = '~'
 t_ATRATE = '@'
+t_LESSEQ = '<='
+t_GREATEQ = '>='
 
 def t_STRING(t):
     r'"[^"]*"'
@@ -75,10 +79,7 @@ def t_STRING(t):
     return t
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    if t.value in reserved:
-        t.type = t.value
-    else:
-        t.type = 'ID'
+    t.type = reserved.get(t.value,'ID')
     return t
 def t_INTEGER(t):
     r'\d+'

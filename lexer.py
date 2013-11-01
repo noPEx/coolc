@@ -72,6 +72,19 @@ t_ATRATE = '@'
 t_LESSEQ = '<='
 t_GREATEQ = '>='
 
+# Define a rule to track line numbers
+
+def t_multilinecomment(t):
+    r'\(\*[^(\*\))]+\*\)'
+    print 'current line is :', t.lexer.lineno
+    print 'line count is :', t.value.count('\n')
+    t.lexer.lineno += t.value.count('\n')
+    print 'multiline comment is :', t.value,'ends here---------------'
+def t_newline(t):
+    r'\n+'
+    print 'new line found'
+    print 'len of nl is ', len(t.value)
+    t.lexer.lineno += len(t.value)
 def t_STRING(t):
     r'"[^"]*"'
     t.type = 'STRING'
@@ -88,17 +101,13 @@ def t_INTEGER(t):
 
 
 
-# Define a rule to track line numbers
-def t_newline(t):
-    r'\n+'
-    #print 'new line found'
-    t.lexer.lineno += len(t.value)
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore = ' \t\r'
-#t_ignore_carriage = '\r'
 t_ignore_COMMENT_SINGLE_LINE = r'--.*(?:--|[^\n])'
-t_ignore_COMMENT_MULTILINE = r'\(\*(?:.|\n)*\*\)'
+#t_ignore_COMMENT_MULTILINE = r'\(\*(?:.|\n)*\*\)'
+#t_ignore_COMMENT_MULTILINE = r'\(\*[^(?:\*\))**\*\)'
+#t_ignore_COMMENT_MULTILINE = r'\(\*[^(\*\))]+\*\)'
 
 # Error handling rule
 def t_error(t):
@@ -113,6 +122,7 @@ lexer = lex.lex()
 import sys
 f = open(sys.argv[1])
 data = "".join(f.readlines())
+print 'hello'
 if __name__ == "__main__":
 
     lexer.input(data)

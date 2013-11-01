@@ -27,13 +27,14 @@ def p_features(p):
     print 'features is :',p[1:]
 
 def p_feature(p):
-    """feature : ID formalities COLON type LBRACE expr RBRACE
+    """feature : ID LPAREN formalities RPAREN COLON type LBRACE expr RBRACE
                 | ID COLON type ASSIGN expr
                 | ID COLON type"""
 
 def p_formalities(p):
     """formalities : formal
                     | formal list_formal
+                    | empty
                     """
     print 'formalities are :', p[1:] 
 
@@ -56,6 +57,7 @@ def p_expr(p):
             | WHILE expr LOOP expr POOL
             | LBRACE expr_statements RBRACE
             | LET ID COLON type ASSIGN expr assignment_list IN expr
+            | LET ID COLON type assignment_list IN expr
             | CASE expr OF assignment_ids ESAC
             | NEW type
             | ISVOID expr
@@ -76,7 +78,7 @@ def p_expr(p):
             | FALSE """
 
 
-    print 'p is :',p
+    print 'p_expr is :',p
 
 def p_type(p):
     """type : ID"""
@@ -91,15 +93,20 @@ def p_assignment_ids(p):
                         | COMMA ID COLON type
                         | empty"""
 
+    print 'assignment_ids is ', p[1:]
 def p_assignment_list(p):
     """assignment_list : COMMA ID COLON type ASSIGN expr assignment_list
                         | COMMA ID COLON type assignment_list
-                        | COMMA ID COLON type"""
+                        | COMMA ID COLON type
+                        | empty"""
+
+    print 'assignment_list is :', p[1:]
 def p_expressions(p):
     """expressions : expr list_expressions
                     | expr """
 
 
+    print 'exprs are :', p[1:]
 def p_list_expressions(p):
     """list_expressions : COMMA expr list_expressions
                         | COMMA expr """
@@ -118,6 +125,7 @@ def p_empty(p):
 # Error rule for syntax errors
 def p_error(p):
     print "Syntax error in input!"
+    print 'syntax error: p is :',p
 
 #Build the parser
 import sys

@@ -75,7 +75,7 @@ t_GREATEQ = '>='
 # Define a rule to track line numbers
 
 def t_multilinecomment(t):
-    r'\(\*[^(\*\))]+\*\)'
+    r'\(\*(.|\n)*?\*\)'
     print 'current line is :', t.lexer.lineno
     print 'line count is :', t.value.count('\n')
     t.lexer.lineno += t.value.count('\n')

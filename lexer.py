@@ -48,6 +48,7 @@ tokens = list(reserved.values()) + [ 'INTEGER',
                     'ATRATE',
                     'LESSEQ',
                     'GREATEQ',
+                    'IMPLY',
                     ]
 
 # Regular expression rules for simple tokens
@@ -71,19 +72,20 @@ t_TILDA = '~'
 t_ATRATE = '@'
 t_LESSEQ = '<='
 t_GREATEQ = '>='
+t_IMPLY = '=>'
 
 # Define a rule to track line numbers
 
 def t_multilinecomment(t):
     r'\(\*(.|\n)*?\*\)'
-    print 'current line is :', t.lexer.lineno
-    print 'line count is :', t.value.count('\n')
+    #print 'current line is :', t.lexer.lineno
+    #print 'line count is :', t.value.count('\n')
     t.lexer.lineno += t.value.count('\n')
     print 'multiline comment is :', t.value,'ends here---------------'
 def t_newline(t):
     r'\n+'
-    print 'new line found'
-    print 'len of nl is ', len(t.value)
+    #print 'new line found'
+    #print 'len of nl is ', len(t.value)
     t.lexer.lineno += len(t.value)
 def t_STRING(t):
     r'"[^"]*"'
@@ -92,6 +94,7 @@ def t_STRING(t):
     return t
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.value = t.value.lower()
     t.type = reserved.get(t.value,'ID')
     return t
 def t_INTEGER(t):

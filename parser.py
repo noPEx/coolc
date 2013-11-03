@@ -31,12 +31,15 @@ def p_feature(p):
                 | ID COLON type ASSIGN expr
                 | ID COLON type"""
 
+    print 'p_feature is :',p[1:]
+    p[0] = p[1:]
 def p_formalities(p):
     """formalities : formal
                     | formal list_formal
                     | empty
                     """
-    print 'formalities are :', p[1:] 
+    print 'p_formalities are :', p[1:] 
+    p[0] = p[1:]
 
 def p_list_formal(p):
     """list_formal : COMMA formal list_formal
@@ -45,6 +48,8 @@ def p_list_formal(p):
 
 def p_formal(p):
     """formal : ID COLON type"""
+    print 'p_formal is :',p[1:]
+    p[0] = p[1:]
 
 
 def p_expr(p):
@@ -78,22 +83,34 @@ def p_expr(p):
             | FALSE """
 
 
-    print 'p_expr is :',p
+    if len(p) == 2:
+        print 'p_expr 2 is :',p[1:]
+        p[0] = p[1:]
+    elif len(p) == 3:
+        print 'p_expr 3 is :',p[1:]
+        p[0] = p[1:]
+    elif len(p) == 4:
+        print 'p_expr 4 is :',p[1:]
+        p[0] = p[1:]
+    elif len(p) == 5:
+        print 'p_expr 5 is :',p[1:]
+        p[0] = p[1:]
+    print 'p_expr is and len is :',p[1:],len(p)
 
 def p_type(p):
     """type : ID"""
     print 'type is ',p[1:]
+    p[0] = p[1:]
 
 
 
 
 def p_assignment_ids(p):
-    """assignment_ids : COMMA ID COLON type ASSIGN expr assignment_ids
-                        | COMMA ID COLON type assignment_ids
-                        | COMMA ID COLON type
-                        | empty"""
+    """assignment_ids : assignment_ids ID COLON type IMPLY expr SEMICOLON
+                        | ID COLON type IMPLY expr SEMICOLON"""
 
-    print 'assignment_ids is ', p[1:]
+
+    print 'assignment_ids is ', p[1:], 'and len is :',len(p)
 def p_assignment_list(p):
     """assignment_list : COMMA ID COLON type ASSIGN expr assignment_list
                         | COMMA ID COLON type assignment_list
@@ -103,10 +120,12 @@ def p_assignment_list(p):
     print 'assignment_list is :', p[1:]
 def p_expressions(p):
     """expressions : expr list_expressions
-                    | expr """
+                    | expr 
+                    | empty"""
 
 
-    print 'exprs are :', p[1:]
+    print 'p_expressions are :', p[1:]
+    p[0] = p[1:]
 def p_list_expressions(p):
     """list_expressions : COMMA expr list_expressions
                         | COMMA expr """
@@ -115,6 +134,7 @@ def p_expr_statements(p):
     """expr_statements : expr SEMICOLON expr_statements
                         | expr SEMICOLON """
 
+    print 'p_expr_statements is :', p[1:]
 
 def p_empty(p):
     """empty : """
@@ -126,6 +146,7 @@ def p_empty(p):
 def p_error(p):
     print "Syntax error in input!"
     print 'syntax error: p is :',p
+    exit()
 
 #Build the parser
 import sys
